@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #f8f8f9;
+    --foreground: #181928;
+    --card: #ffffff;
+    --popover: #ffffff;
+    --primary: #3f4058;
+    --primary-foreground: #ffffff;
+    --secondary: #aaac93;
+    --secondary-foreground: #181928;
+    --muted: #eeeef1;
+    --muted-foreground: #606174;
+    --accent: #eae3e9;
+    --accent-foreground: #3f4058;
+    --destructive: #9a3e67;
+    --border: #cccccc;
+    --input: #cccccc;
+    --ring: #3f4058;
+
+    --income: #606939;
+    --expense: #7f5175;
+    --gain: #0e9f6e;
+    --loss: #b91c1c;
+    --success: #606939;
+    --warning: #81632f;
+    --signal-up: #0e9f6e;
+    --signal-down: #b91c1c;
+    --accent-ink: #7a6178;
+  }
+
+  .dark:root {
+    --background: #0c0c15;
+    --foreground: #f1f1f5;
+    --card: #141520;
+    --popover: #141520;
+    --primary: #cccccc;
+    --primary-foreground: #0c0c15;
+    --secondary: #aaac93;
+    --secondary-foreground: #0c0c15;
+    --muted: #242534;
+    --muted-foreground: #acadb7;
+    --accent: #332d3a;
+    --accent-foreground: #f1f1f5;
+    --destructive: #db87a8;
+    --border: #3f4058;
+    --input: #3f4058;
+    --ring: #ac93aa;
+
+    --income: #b9bf97;
+    --expense: #c8a4c3;
+    --gain: #29a87c;
+    --loss: #cf3131;
+    --success: #b9bf97;
+    --warning: #d5ba82;
+    --signal-up: #29a87c;
+    --signal-down: #cf3131;
+    --accent-ink: #c9b6c8;
+  }
+}
