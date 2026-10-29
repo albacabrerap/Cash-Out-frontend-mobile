@@ -3,6 +3,7 @@ export interface SseEvent {
   data: string
 }
 
+/* Arma eventos SSE*/
 export function createSseParser(onEvent: (event: SseEvent) => void) {
   let buffer = ''
   return (chunk: string) => {

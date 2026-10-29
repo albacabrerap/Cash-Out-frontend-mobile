@@ -1,15 +1,17 @@
-import "../global.css"
-import { useEffect } from "react"
-import { Text, View } from "react-native"
+import { Button } from "@/components/ui/Button"
+import { OfflineBanner } from "@/components/ui/OfflineBanner"
+import { AuthProvider } from "@/contexts/AuthProvider"
+import { ToastProvider } from "@/contexts/ToastProvider"
+import { useAuth } from "@/hooks/useAuth"
 import { Stack } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
+import { useEffect } from "react"
+import { Text, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { Button } from "@/components/ui/Button"
-import { AuthProvider } from "@/contexts/AuthProvider"
-import { useAuth } from "@/hooks/useAuth"
+import "../global.css"
 
-// splash hasta encontrar sesiones guardadas
+// La splash se queda hasta saber si hay una sesion guardada
 SplashScreen.preventAutoHideAsync()
 
 
@@ -22,6 +24,7 @@ function RootNavigator() {
 
   if (status === "restoring") return null
 
+  // Hay sesion guardada pero el servidor no respondio
   if (status === "unavailable") {
     return (
       <View className="flex-1 items-center justify-center gap-4 bg-background px-8">
@@ -52,10 +55,13 @@ function RootNavigator() {
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <StatusBar style="auto" />
-        <RootNavigator />
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <StatusBar style="auto" />
+          <RootNavigator />
+          <OfflineBanner />
+        </AuthProvider>
+      </ToastProvider>
     </SafeAreaProvider>
   )
 }

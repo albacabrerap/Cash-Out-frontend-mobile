@@ -23,15 +23,18 @@ export function isIsoDate(value: string | null | undefined): value is string {
   return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d
 }
 
+/** El rango solo vale completo y en orden, como lo exige el backend. */
 export function validRange(from: string, to: string): { from: string; to: string } | undefined {
   return isIsoDate(from) && isIsoDate(to) && from <= to ? { from, to } : undefined
 }
 
+/** "2026-10-03" como fecha local, sin pasar por UTC (que la correria un dia en Lima). */
 export function parseIsoDate(value: string): Date {
   const [y, m, d] = value.split('-').map(Number)
   return new Date(y, m - 1, d)
 }
 
+/** Tope del selector de fecha de nacimiento: el backend exige una fecha pasada. */
 export function yesterdayIso(): string {
   return addDays(todayIso(), -1)
 }

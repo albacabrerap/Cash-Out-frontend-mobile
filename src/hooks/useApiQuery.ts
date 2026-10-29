@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { toApiError, type ApiError } from "@/api/errors"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 
 export interface ApiQuery<T> {
   data: T | undefined
   error: ApiError | undefined
   isLoading: boolean
-  /** Recargando con datos previos en pantalla. */
   isRefreshing: boolean
   reload(): void
 }
