@@ -1,8 +1,3 @@
-import { useState } from "react"
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { Controller, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { toApiError, userMessage } from "@/api/errors"
 import type { SessionEndReason } from "@/api/tokenStore"
 import { Button } from "@/components/ui/Button"
@@ -11,6 +6,12 @@ import { Notice } from "@/components/ui/Notice"
 import { useAuth } from "@/hooks/useAuth"
 import { applyServerFieldErrors } from "@/utils/formErrors"
 import { loginSchema, type LoginValues } from "@/utils/validation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { router } from "expo-router"
+import { useState } from "react"
+import { Controller, useForm } from "react-hook-form"
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 const END_REASON_MESSAGES: Record<SessionEndReason, string> = {
   logout: "Cerraste sesión. ¡Hasta pronto!",
@@ -19,6 +20,7 @@ const END_REASON_MESSAGES: Record<SessionEndReason, string> = {
 
 export default function LoginScreen() {
   const { login, endReason } = useAuth()
+  // const navigation = useNavigation()
   const [formError, setFormError] = useState<string | null>(null)
 
   const form = useForm<LoginValues>({
@@ -110,6 +112,16 @@ export default function LoginScreen() {
             loading={isSubmitting}
             onPress={form.handleSubmit(onSubmit)}
           />
+
+          <Text className="text-center text-sm text-muted-foreground">
+            ¿No tiene cuenta?{" "}
+            <Text
+              className="font-medium text-foreground underline"
+              onPress={() => router.push("/register")}
+            >
+              Registrarse
+            </Text>
+          </Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
