@@ -1,5 +1,6 @@
 import type { AuthResponse, User } from "@/types/auth"
 import type { Contribution, GoalStatus, SavingsGoal } from "@/types/goals"
+import type { Minigame, MinigameSession } from "@/types/minigames"
 import type { Expense, ExpenseCategory, Income } from "@/types/movements"
 import { addDays, todayIso } from "@/utils/dates"
 
@@ -111,7 +112,49 @@ export const db = {
     ],
     2: [{ id: 3, amount: 1125, source: "MANUAL", createdAt: at(12) }],
   } as Record<number, Contribution[]>,
-  nextId: { income: 5, expense: 21, goal: 4, contribution: 4 },
+  /** Saldo de fichas de la billetera de ejemplo. */
+  tokenBalance: 120,
+  // Los temas coinciden con los de src/games: el contenido se elige por `topic`.
+  minigames: [
+    {
+      id: 1,
+      title: "Trivia de interés compuesto",
+      type: "TRIVIA",
+      topic: "Interés compuesto",
+      tokenCost: 0,
+      maxTokenReward: 15,
+      status: "PUBLISHED",
+    },
+    {
+      id: 2,
+      title: "¿Apuesta o inversión?",
+      type: "QUIZ",
+      topic: "Apuesta o inversión",
+      tokenCost: 5,
+      maxTokenReward: 25,
+      status: "PUBLISHED",
+    },
+    {
+      id: 3,
+      title: "Simulador de préstamos",
+      type: "SIMULATION",
+      topic: "Préstamos",
+      tokenCost: 10,
+      maxTokenReward: 40,
+      status: "PUBLISHED",
+    },
+  ] as Minigame[],
+  minigameSessions: [
+    {
+      id: 1,
+      minigameTitle: "Trivia de interés compuesto",
+      score: 75,
+      tokensSpent: 0,
+      tokensEarned: 11.25,
+      playedAt: `${ago(3)}T15:00:00`,
+    },
+  ] as MinigameSession[],
+  nextId: { income: 5, expense: 21, goal: 4, contribution: 4, minigameSession: 2 },
 }
 
 export function deriveGoal(goal: StoredGoal): SavingsGoal {

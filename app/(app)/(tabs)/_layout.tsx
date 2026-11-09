@@ -9,6 +9,7 @@ const TABS: { name: string; title: string; icon: IconName }[] = [
   { name: "index", title: "Inicio", icon: "home-outline" },
   { name: "movements", title: "Movimientos", icon: "swap-vertical-outline" },
   { name: "goals", title: "Metas", icon: "flag-outline" },
+  { name: "games", title: "Juegos", icon: "game-controller-outline" },
   { name: "profile", title: "Perfil", icon: "person-outline" },
 ]
 
