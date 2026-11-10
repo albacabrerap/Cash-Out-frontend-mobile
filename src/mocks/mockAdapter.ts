@@ -1,6 +1,7 @@
 
 import type { PageResponse } from "@/types/api"
 import type { ContributionInput, SavingsGoalInput } from "@/types/goals"
+import type { MinigameSessionInput } from "@/types/minigames"
 import type { ExpenseInput, IncomeInput, Movement } from "@/types/movements"
 import { CATEGORY_META } from "@/utils/categories"
 import { expenseToMovement, incomeToMovement } from "@/utils/movements"
@@ -20,6 +21,7 @@ import {
   db,
   deriveGoal,
 } from "./db"
+import { portfolioDb } from "./portfolioDb"
 
 const DELAY_MS = 450
 const FAIL_RATE = Number(process.env.EXPO_PUBLIC_MOCK_FAIL_RATE ?? 0)
@@ -235,6 +237,67 @@ const routes: [string, RegExp, Handler][] = [
       }
       db.contributions[goal.id] = [contribution, ...(db.contributions[goal.id] ?? [])]
       return { status: 201, data: contribution }
+    },
+  ],
+
+  // --- Minijuegos y fichas
+  ["GET", /^\/minigames$/, () => ({ data: db.minigames.filter((game) => game.status === "PUBLISHED") })],
+  [
+    "GET",
+    /^\/minigames\/(\d+)$/,
+    ({ match }) => {
+      const game = db.minigames.find((item) => item.id === Number(match[1]) && item.status === "PUBLISHED")
+      if (!game) throw new MockHttpError(404, "No encontramos ese minijuego.")
+      return { data: game }
+    },
+  ],
+  ["GET", /^\/minigame-sessions$/, () => ({ data: db.minigameSessions })],
+  [
+    "POST",
+    /^\/minigame-sessions$/,
+    ({ body }) => {
+      const input = body as MinigameSessionInput
+      const game = db.minigames.find((item) => item.id === input.minigameId && item.status === "PUBLISHED")
+      if (!game) throw new MockHttpError(404, "No encontramos ese minijuego.")
+      if (typeof input.score !== "number" || input.score < 0) {
+        throw new MockHttpError(400, "Datos inválidos", [{ field: "score", message: "El puntaje no puede ser negativo." }])
+      }
+      if (game.tokenCost > db.tokenBalance) {
+        throw new MockHttpError(400, `No tienes fichas suficientes: este juego cuesta ${money(game.tokenCost)}.`)
+      }
+      // Igual que el backend: la recompensa es proporcional al puntaje, con tope en 100.
+      const earned = Math.round(((game.maxTokenReward * Math.min(input.score, 100)) / 100) * 100) / 100
+      db.tokenBalance = Math.round((db.tokenBalance - game.tokenCost + earned) * 100) / 100
+      const session = {
+        id: db.nextId.minigameSession++,
+        minigameTitle: game.title,
+        score: input.score,
+        tokensSpent: game.tokenCost,
+        tokensEarned: earned,
+        playedAt: new Date().toISOString().slice(0, 19),
+      }
+      db.minigameSessions = [session, ...db.minigameSessions]
+      return { status: 201, data: session }
+    },
+  ],
+  [
+    "GET",
+    /^\/token-wallet$/,
+    () => ({ data: { id: 1, tokenBalance: db.tokenBalance, updatedAt: new Date().toISOString().slice(0, 19) } }),
+  ],
+
+// --- Inversion simulada
+  ["GET", /^\/portfolio$/, () => ({ data: portfolioDb.portfolio() })],
+  ["GET", /^\/token-wallet$/, () => ({ data: portfolioDb.wallet() })],
+  ["GET", /^\/orders$/, ({ params }) => ({ data: paginate(portfolioDb.orders(), params) })],
+  ["GET", /^\/assets$/, ({ params }) => ({ data: paginate(portfolioDb.searchAssets(String(params.search ?? "")), params) })],
+  ["GET", /^\/assets\/(\d+)\/quote$/, ({ match }) => ({ data: portfolioDb.quote(Number(match[1])) })],
+  [
+    "POST",
+    /^\/orders$/,
+    ({ body }) => {
+      const { created, order } = portfolioDb.place(body)
+      return { status: created ? 201 : 200, data: order }
     },
   ],
 ]
