@@ -1,8 +1,8 @@
-import { Ionicons } from "@expo/vector-icons"
-import { Text, View } from "react-native"
-import type { OrderStatus, TradeOrder } from "@/types/portfolio"
+import { OrderStatus, TradeOrder } from "@/types/portfolio"
 import { formatQuantity, formatServerDate, formatTokenAmount } from "@/utils/format"
 import { useThemeColors } from "@/utils/theme"
+import { Ionicons } from "@expo/vector-icons"
+import { Text, View } from "react-native"
 
 const STATUS: Record<OrderStatus, { label: string; className: string }> = {
   EXECUTED: { label: "Ejecutada", className: "text-success" },

@@ -1,9 +1,9 @@
-import { fetch } from "expo/fetch"
 import { api } from "@/api/client"
 import { ApiError } from "@/api/errors"
 import { tokenStore } from "@/api/tokenStore"
 import { API_URL } from "@/config"
-import { createSseParser, type SseEvent } from "@/lib/sse"
+import { createSseParser, type SseEvent } from "@/utils/sse"
+import { fetch } from "expo/fetch"
 
 type StreamResponse = Awaited<ReturnType<typeof fetch>>
 

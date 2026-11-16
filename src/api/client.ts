@@ -3,17 +3,16 @@ import { mockAdapter } from "@/mocks/mockAdapter"
 import type { AuthResponse } from "@/types/auth"
 import { sleep } from "@/utils/sleep"
 import axios, {
-  isAxiosError,
-  type AxiosAdapter,
-  type AxiosInstance,
-  type InternalAxiosRequestConfig,
+    isAxiosError,
+    type AxiosAdapter,
+    type AxiosInstance,
+    type InternalAxiosRequestConfig,
 } from "axios"
 import { ApiError, toApiError } from "./errors"
 import { tokenStore } from "./tokenStore"
 
 declare module "axios" {
   interface AxiosRequestConfig {
-    /** En login/registro un 401 son credenciales incorrectas, no una sesion por renovar. */
     skipAuthRefresh?: boolean
   }
 }
@@ -24,7 +23,6 @@ interface TrackedConfig extends InternalAxiosRequestConfig {
   _retryCount?: number
 }
 
-/** Reintentos de lecturas que fallaron por red, timeout o 5xx. Las escrituras nunca se repiten solas. */
 const MAX_RETRIES = 2
 const RETRY_BASE_DELAY_MS = 600
 

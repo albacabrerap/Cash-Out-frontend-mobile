@@ -1,10 +1,9 @@
-import type { ComponentProps } from "react"
-import type { Ionicons } from "@expo/vector-icons"
 import { EXPENSE_CATEGORIES, type ExpenseCategory } from "@/types/movements"
+import type { Ionicons } from "@expo/vector-icons"
+import type { ComponentProps } from "react"
 
 type IconName = ComponentProps<typeof Ionicons>["name"]
 
-/** `seriesIndex` apunta a ThemeColors.series: cada categoria conserva su color. */
 export const CATEGORY_META: Record<ExpenseCategory, { label: string; icon: IconName; seriesIndex: number }> = {
   FOOD: { label: "Comida", icon: "restaurant-outline", seriesIndex: 0 },
   TRANSPORT: { label: "Transporte", icon: "bus-outline", seriesIndex: 1 },

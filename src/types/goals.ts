@@ -10,10 +10,9 @@ export interface SavingsGoal {
   progressPercent: number
   /** yyyy-MM-dd */
   deadline: string
-  /** EXPIRED se calcula al responder: la meta vence sola al pasar la fecha. */
+
   status: GoalStatus
   completedAt: string | null
-  /** LocalDateTime en UTC. Con deadline dice que parte del plazo ya paso. */
   createdAt: string
 }
 

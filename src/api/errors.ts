@@ -1,5 +1,5 @@
-import { isAxiosError } from 'axios'
 import type { ErrorResponseBody } from '@/types/api'
+import { isAxiosError } from 'axios'
 
 export type ApiErrorKind = 'http' | 'network' | 'timeout' | 'canceled' | 'unknown'
 
@@ -70,7 +70,6 @@ export function toApiError(error: unknown): ApiError {
   return new ApiError({ kind: 'unknown', cause: error })
 }
 
-/** En 400, 404 y 409 el mensaje del backend ya esta escrito para el usuario y se usa tal cual. */
 export function userMessage(error: ApiError): string {
   switch (error.kind) {
     case 'canceled':
